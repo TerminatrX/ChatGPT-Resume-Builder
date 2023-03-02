@@ -54,7 +54,7 @@ const Home = () => {
             <h1>TerminatrX's Resume Builder</h1>
             <p>Generate a AI build Resume powered by ChapGPT</p>
             {/* Form */}
-            <form
+            <form 
                 onSubmit={handleFormSubmit}
                 method='POST'
                 encType='multipart/form-data'
