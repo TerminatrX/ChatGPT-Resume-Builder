@@ -10,6 +10,28 @@ const Home = () => {
     const [headshot, setHeadshot] = useState(null);
     const [loading, setLoading] = useState(false);
 
+    // state that holds array of job descriptions
+    const [companyInfo, setCompanyInfo] = useState([{ name: "", position: ""}]);
+
+    // update state with user input
+    const handleAddCompany = () => 
+        setCompanyInfo([...companyInfo, {name: "", position: ""}]);
+    
+    // remove selected item from the list
+    const handleRemoveCompany = (index) => {
+        const list = [...companyInfo];
+        list.splice(index, 1);
+        setCompanyInfo(list);
+    }
+
+    // updates item within list
+    const handleUpdateCompany = (e, index) => {
+        const { name, value} = e.target;
+        const list = [...companyInfo];
+        list[index][name] = value;
+        setCompanyInfo(list);
+    }
+
     //form submission
     const handleFormSubmit = (e) => {
         e.preventDefault();
@@ -59,7 +81,7 @@ const Home = () => {
                         />
                     </div>
                     <div>
-                        <label htmlFor='currentLength'>For how long? (year)</label>
+                        <label htmlFor='currentLength'>Duration (year)</label>
                         <input
                             type='number'
                             required
@@ -91,6 +113,47 @@ const Home = () => {
                     onChange={(e) => setHeadshot(e.target.files[0])}
                 />
 
+                {/* Previous Work Experience Section */}
+
+                <h3>Previous Work Experience</h3>
+                {companyInfo.map((company, index) => (
+                    <div className='nestedContainer' key={index}>
+                        <div className='companies'>
+                            <label htmlFor='name'>Company Name</label>
+                            <input
+                                type='text'
+                                name='name'
+                                required
+                                onChange={(e) => handleUpdateCompany(e, index)}
+                            />
+                        </div>
+                        <div className='companies'>
+                            <label htmlFor='position'>Position Held</label>
+                            <input
+                                type='text'
+                                name='position'
+                                required
+                                onChange={(e) => handleUpdateCompany(e, index)}
+                            />
+                        </div>
+
+                        <div className='btn__group'>
+                            {companyInfo.length - 1 === index && companyInfo.length < 4 && (
+                                <button id='addBtn' onClick={handleAddCompany}>
+                                    Add
+                                </button>
+                            )}
+                            {companyInfo.length > 1 && (
+                                <button
+                                    id='deleteBtn'
+                                    onClick={() => handleRemoveCompany(index)}
+                                >
+                                    Del
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                ))}
                 <button>CREATE YOUR RESUME</button>
             </form>
         </div>
