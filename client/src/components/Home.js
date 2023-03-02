@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Loading from "./Loading";
+import axios from "axios";
 
 const Home = () => {
     //setting state
