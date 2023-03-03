@@ -57,6 +57,16 @@ app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
     });
 });
 
+// API key Open AI
+const { Configuration, OpenAIApi } = require("openai");
+
+const configuration = new Configuration({
+    apiKey: "<YOUR_API_KEY>",
+});
+
+const openai = new OpenAIApi(configuration);
+
+
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });

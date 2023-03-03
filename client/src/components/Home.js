@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Loading from "./Loading";
 import axios from "axios";
 
@@ -10,6 +11,9 @@ const Home = () => {
     const [currentTechnologies, setCurrentTechnologies] = useState("");
     const [headshot, setHeadshot] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    // navigate function from router
+    const nagivate = useNavigate();
 
     // state that holds array of job descriptions
     const [companyInfo, setCompanyInfo] = useState([{ name: "", position: ""}]);
@@ -36,13 +40,34 @@ const Home = () => {
     //form submission
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        console.log({
-            fullName,
-            currentPosition,
-            currentLength,
-            currentTechnologies,
-            headshot,
-        });
+        // submit form data to Node.js server
+
+        const formData = new FormData();
+        formData.append("headshotImage", headshot, headshot.name);
+        formData.append("fullName", fullName);
+        formData.append("currentPosition", currentPosition);
+        formData.append("currentLength", currentLength);
+        formData.append("currentTechnologies", currentTechnologies);
+        formData.append("workHistory", JSON.stringify(companyInfo));
+        
+        axios
+            .post("http://localhost:4000/resume/create", formData, {})
+            .then((res) => {
+                if (res.data.message) {
+                    console.log(res.data.data);
+                    nagivate("/resume");
+                }
+            })
+            .catch((err) => console.error(err));
+
+        // old code
+        // console.log({
+        //     fullName,
+        //     currentPosition,
+        //     currentLength,
+        //     currentTechnologies,
+        //     headshot,
+        // });
         setLoading(true);
     };
     //👇🏻 Renders the Loading component you submit the form
