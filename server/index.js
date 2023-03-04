@@ -39,30 +39,6 @@ const upload = multer({
     limits: { fileSize: 1024 * 1024 * 5},
 });
 
-// route for form imput from React App
-app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
-    const {
-        fullName,
-        currentPosition,
-        currentLength,
-        currentTechnologies,
-        workHistory, //JSON format
-    } = req.body;
-
-    const workArray = JSON.parse(workHistory); //an array
-
-    //👇🏻 group the values into an object
-    const newEntry = {
-        id: generateID(),
-        fullName,
-        image_url: `http://localhost:4000/uploads/${req.file.filename}`,
-        currentPosition,
-        currentLength,
-        currentTechnologies,
-        workHistory: workArray,
-    };
-});
-
 // API key Open AI
 const { Configuration, OpenAIApi } = require("openai");
 
@@ -85,6 +61,30 @@ const ChatGPTFunction = async (text) => {
     });
     return response.data.choices[0].text;
 }
+
+// route for form imput from React App
+app.post("/resume/create", upload.single("headshotImage"), async (req, res) => {
+    const {
+        fullName,
+        currentPosition,
+        currentLength,
+        currentTechnologies,
+        workHistory, //JSON format
+    } = req.body;
+
+    const workArray = JSON.parse(workHistory); //an array
+
+    // group the values into an object
+    const newEntry = {
+        id: generateID(),
+        fullName,
+        image_url: `http://localhost:4000/uploads/${req.file.filename}`,
+        currentPosition,
+        currentLength,
+        currentTechnologies,
+        workHistory: workArray,
+    };
+});
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
