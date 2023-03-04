@@ -62,10 +62,23 @@ const { Configuration, OpenAIApi } = require("openai");
 
 const configuration = new Configuration({
     apiKey: "<YOUR_API_KEY>",
-});
+}); 
 
 const openai = new OpenAIApi(configuration);
 
+// Take user input to use as prompt, and reply with GPT response
+const ChatGPTFunction = async (text) => {
+    const response = await openai.createCompletion({
+        model: "text-davinci-003",
+        prompt: text,
+        temperature: 0.6,
+        max_tokens: 250,
+        top_p: 1,
+        frequency_penalty: 1,
+        presence_penalty: 1,
+    });
+    return response.data.choices[0].text;
+}
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
